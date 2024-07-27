@@ -72,7 +72,7 @@ public class GameplayManager : MonoBehaviour, IGridElementObjectProvider
         SoundManager.Instance.Switch(gameStartData.SoundState);
         InputManager.Instance.eventInput += HandleInputEvent;
 
-        gameBoardGrid = new GameBoardGrid(7, 5, this);
+        gameBoardGrid = new GameBoardGrid(12, 12, this);
 
         CreateGame(gameStartData.NextToLoadGame);
 
