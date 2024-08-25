@@ -6,59 +6,45 @@ using UnityEngine;
 public class GameData
 {
     public int Id;
-    public int MinimumStepsCount;
+    public string Level;
+    public string Name;
 
-    public Vector2 InscriptionBlockPositionRed;
-    public Vector2 InscriptionBlockPositionBlue;
-    public Vector2 InscriptionBlockPositionYellow;
-
-    public Vector2 InscriptionBlockTargetPositionRed;
-    public Vector2 InscriptionBlockTargetPositionBlue;
-    public Vector2 InscriptionBlockTargetPositionYellow;
-
+    public Vector2 PlayerPosition;
     public List<Vector2> MobileBlocksPositions;
     public List<Vector2> StaticBlocksPositions;
+    public List<Vector2> PawnBlocksPositions;
+    public List<Vector2> PawnTargetBlocksPositions;
+    public List<Vector2> TumblerBlocksPositions;
+    public List<Vector2> TumblerTargetBlocksPositions;
 
     public GameData()
     {
         Id = 0;
-        MinimumStepsCount = 0;
+        Level = null;
+        Name = null;
 
-        InscriptionBlockPositionRed = new Vector2();
-        InscriptionBlockPositionBlue = new Vector2();
-        InscriptionBlockPositionYellow = new Vector2();
-
-        InscriptionBlockTargetPositionRed = new Vector2();
-        InscriptionBlockTargetPositionBlue = new Vector2();
-        InscriptionBlockTargetPositionYellow = new Vector2();
-
+        PlayerPosition = new Vector2();
         MobileBlocksPositions = null;
         StaticBlocksPositions = null;
+        PawnBlocksPositions = null;
+        PawnTargetBlocksPositions = null;
+        TumblerBlocksPositions = null;
+        TumblerTargetBlocksPositions = null;
     }
 
-    public GameData(int id, int stepsMinimum,
-                    Vector2 inscriptionBlockRed, Vector2 inscriptionBlockBlue, Vector2 inscriptionBlockYellow,
-                    Vector2 targetBlockRed, Vector2 targetBlockBlue, Vector2 targetBlockYellow,
-                    List<Vector2> mobileBlocksPositions = null, List<Vector2> staticBlocksositions = null)
+    public GameData(int id, string level, string name, Vector2 playerPosition, List<Vector2> mobileBlocksPositions, List<Vector2> staticBlocksositions, List<Vector2> pawnBlocksPositions, List<Vector2> pawnTargetBlocksPositions, List<Vector2> tumblerBlocksPositions, List<Vector2> tumblerTargetBlocksPositions)
     {
         Id = id;
-        MinimumStepsCount = stepsMinimum;
+        Level = level;
+        Name = name;
 
-        InscriptionBlockPositionRed = inscriptionBlockRed;
-        InscriptionBlockPositionBlue = inscriptionBlockBlue;
-        InscriptionBlockPositionYellow = inscriptionBlockYellow;
-
-        InscriptionBlockTargetPositionRed = targetBlockRed;
-        InscriptionBlockTargetPositionBlue = targetBlockBlue;
-        InscriptionBlockTargetPositionYellow = targetBlockYellow;
-
+        PlayerPosition = playerPosition;
         MobileBlocksPositions = mobileBlocksPositions;
         StaticBlocksPositions = staticBlocksositions;
-    }
-
-    public bool IsDoubleGame
-    {
-        get { return (InscriptionBlockPositionYellow == InscriptionBlockTargetPositionYellow); }
+        PawnBlocksPositions = pawnBlocksPositions;
+        PawnTargetBlocksPositions = pawnTargetBlocksPositions;
+        TumblerBlocksPositions = tumblerBlocksPositions;
+        TumblerTargetBlocksPositions = tumblerTargetBlocksPositions;
     }
 }
 

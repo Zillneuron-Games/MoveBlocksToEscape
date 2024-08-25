@@ -18,20 +18,18 @@ public abstract class AGame
     protected int stepsCounter;
     protected int coinsCounter;
 
-    protected int stepsMinimum;
     protected int playedNumber;
 
     protected int backStepsCounter;
     protected int backStepsMaximum;
 
-    protected InscriptionBlock inscriptionBlockRed;
-    protected InscriptionBlock inscriptionBlockBlue;
-
-    protected TargetBlock targetBlockRed;
-    protected TargetBlock targetBlockBlue;
-
+    protected PlayerBlock playerBlock;
     protected List<MobileBlock> mobileBlocks;
     protected List<StaticBlock> staticBlocks;
+    protected List<PawnBlock> pawnBlocks;
+    protected List<PawnTargetBlock> pawnTargetBlocks;
+    protected List<TumblerBlock> tumblerBlocks;
+    protected List<TumblerTargetBlock> tumblerTargetBlocks;
 
     protected Stack<GameplayStep> allMoves;
 
@@ -72,11 +70,6 @@ public abstract class AGame
         get { return gameDataDynamic.BestCoins; }
     }
 
-    public int MinimumStepsCount
-    {
-        get { return stepsMinimum; }
-    }
-
     public int BackStepsCount
     {
         get { return backStepsCounter; }
@@ -94,28 +87,25 @@ public abstract class AGame
 
     #region Constructors
 
-    public AGame(GameBoardGrid gameBoardGrid, int id, int stepsBest, int coinsBest, int stepsMinimum, int playedNumber, InscriptionBlock inscriptionBlockRed, InscriptionBlock inscriptionBlockBlue,
-                        TargetBlock targetBlockRed, TargetBlock targetBlockBlue, List<MobileBlock> mobileBlocks, List<StaticBlock> staticBlocks, Stack<GameplayStep> allMoves)
+    public AGame(GameBoardGrid gameBoardGrid, int id, int stepsBest, int coinsBest, int playedNumber, PlayerBlock playerBlock, List<MobileBlock> mobileBlocks, List<StaticBlock> staticBlocks, List<PawnBlock> pawnBlocks, List<PawnTargetBlock> pawnTargetBlocks, List<TumblerBlock> tumblerBlocks, List<TumblerTargetBlock> tumblerTargetBlocks, Stack<GameplayStep> allMoves)
     {
         this.gameBoardGrid = gameBoardGrid;
         this.id = id;
         this.stepsCounter = 0;
         this.coinsCounter = 0;
 
-        this.stepsMinimum = stepsMinimum;
         this.playedNumber = playedNumber;
 
         this.backStepsCounter = 0;
         this.backStepsMaximum = GameStartData.MaximumStepsCount;
 
-        this.inscriptionBlockRed = inscriptionBlockRed;
-        this.inscriptionBlockBlue = inscriptionBlockBlue;
-
-        this.targetBlockRed = targetBlockRed;
-        this.targetBlockBlue = targetBlockBlue;
-
+        this.playerBlock = playerBlock;
         this.mobileBlocks = mobileBlocks;
         this.staticBlocks = staticBlocks;
+        this.pawnBlocks = pawnBlocks;
+        this.pawnTargetBlocks = pawnTargetBlocks;
+        this.tumblerBlocks = tumblerBlocks;
+        this.tumblerTargetBlocks = tumblerTargetBlocks;
 
         this.gameDataDynamic = new GameDataDynamic(id, stepsBest, coinsBest, playedNumber + 1);
 
@@ -188,16 +178,19 @@ public abstract class AGame
     protected void CalculateCoins()
     {
         float levelNumber = id;
-        float gameMinimalSteps = stepsMinimum;
+        float gameMinimalSteps = 10;
+
+        UnityEngine.Debug.LogError("Change Calculation.");
+
         float playerSteps = StepsCount;
 
-        if (stepsMinimum > StepsCount)
-        {
-            //BugReport.Instance.MinimumSteps(id, stepsMinimum, StepsCount);
+        //if (stepsMinimum > StepsCount)
+        //{
+        //    //BugReport.Instance.MinimumSteps(id, stepsMinimum, StepsCount);
 
-            gameMinimalSteps = StepsCount;
-            playerSteps = stepsMinimum;
-        }
+        //    gameMinimalSteps = StepsCount;
+        //    playerSteps = stepsMinimum;
+        //}
 
         float mainFactorFloat = levelNumber + 3 * gameMinimalSteps - playerSteps;
 

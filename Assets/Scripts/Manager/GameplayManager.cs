@@ -25,18 +25,13 @@ public class GameplayManager : MonoBehaviour, IGridElementObjectProvider
 
     #region Inspector
 
-    public GameObject inscriptionRed;
-    public GameObject inscriptionBlue;
-    public GameObject inscriptionYellow;
-    public GameObject inscriptionGreen;
-
-    public GameObject targetRed;
-    public GameObject targetBlue;
-    public GameObject targetYellow;
-    public GameObject targetGreen;
-
+    public GameObject player;
     public GameObject[] mobileBlocks;
     public GameObject[] staticBlocks;
+    public GameObject[] pawnBlocks;
+    public GameObject[] pawnTargetBlocks;
+    public GameObject[] tumblerBlocks;
+    public GameObject[] tumblerTargetBlocks;
 
     public GameObjectRow[] gridBlocks;
 
@@ -118,137 +113,127 @@ public class GameplayManager : MonoBehaviour, IGridElementObjectProvider
 
         GameDataDynamic gameDataDynamic = gameStartData.GetGameDataDynamic(gameId);
 
-        if (gameData.IsDoubleGame)
+        int indexCounter = 1;
+
+        SortedDictionary<int, Vector2> allBlocksPositions = new SortedDictionary<int, Vector2>();
+
+        PlayerBlock playerBlock = new PlayerBlock(indexCounter, player, gameBoardGrid[(int)gameData.PlayerPosition.x, (int)gameData.PlayerPosition.y]);
+        allBlocksPositions.Add(indexCounter, gameData.PlayerPosition);
+        indexCounter++;
+
+        List<MobileBlock> mobileBlocks = null;
+
+        if (gameData.MobileBlocksPositions != null && gameData.MobileBlocksPositions.Count > 0)
         {
-            int indexCounter = 1;
+            mobileBlocks = new List<MobileBlock>();
 
-            SortedDictionary<int, Vector2> allBlocksPositions = new SortedDictionary<int, Vector2>();
+            int mobileBlocksIndexCounter = 0;
 
-            InscriptionBlock inscriptionBlockRed = new InscriptionBlock(indexCounter, inscriptionRed, gameBoardGrid[(int)gameData.InscriptionBlockPositionRed.x, (int)gameData.InscriptionBlockPositionRed.y]);
-            allBlocksPositions.Add(indexCounter, gameData.InscriptionBlockPositionRed);
-            indexCounter++;
-
-            InscriptionBlock inscriptionBlockBlue = new InscriptionBlock(indexCounter, inscriptionBlue, gameBoardGrid[(int)gameData.InscriptionBlockPositionBlue.x, (int)gameData.InscriptionBlockPositionBlue.y]);
-            allBlocksPositions.Add(indexCounter, gameData.InscriptionBlockPositionBlue);
-            indexCounter++;
-
-            TargetBlock targetBlockRed = new TargetBlock(indexCounter, targetRed, gameBoardGrid[(int)gameData.InscriptionBlockTargetPositionRed.x, (int)gameData.InscriptionBlockTargetPositionRed.y]);
-            indexCounter++;
-
-            TargetBlock targetBlockBlue = new TargetBlock(indexCounter, targetBlue, gameBoardGrid[(int)gameData.InscriptionBlockTargetPositionBlue.x, (int)gameData.InscriptionBlockTargetPositionBlue.y]);
-            indexCounter++;
-
-            List<MobileBlock> mobileBlocks = null;
-
-            if (gameData.MobileBlocksPositions != null && gameData.MobileBlocksPositions.Count > 0)
+            foreach (Vector2 pos in gameData.MobileBlocksPositions)
             {
-                mobileBlocks = new List<MobileBlock>();
-
-                int mobileBlocksIndexCounter = 0;
-
-                foreach (Vector2 pos in gameData.MobileBlocksPositions)
-                {
-                    MobileBlock tempBlock = new MobileBlock(indexCounter, this.mobileBlocks[mobileBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
-                    mobileBlocks.Add(tempBlock);
-                    allBlocksPositions.Add(indexCounter, pos);
-                    indexCounter++;
-                    mobileBlocksIndexCounter++;
-                }
+                MobileBlock tempBlock = new MobileBlock(indexCounter, this.mobileBlocks[mobileBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
+                mobileBlocks.Add(tempBlock);
+                allBlocksPositions.Add(indexCounter, pos);
+                indexCounter++;
+                mobileBlocksIndexCounter++;
             }
-
-            List<StaticBlock> staticBlocks = null;
-
-            if (gameData.StaticBlocksPositions != null && gameData.StaticBlocksPositions.Count > 0)
-            {
-                staticBlocks = new List<StaticBlock>();
-
-                int staticBlocksIndexCounter = 0;
-
-                foreach (Vector2 pos in gameData.StaticBlocksPositions)
-                {
-                    StaticBlock tempBlock = new StaticBlock(indexCounter, this.staticBlocks[staticBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
-                    staticBlocks.Add(tempBlock);
-                    indexCounter++;
-                    staticBlocksIndexCounter++;
-                }
-            }
-
-            Stack<GameplayStep> allStepsContainer = new Stack<GameplayStep>();
-            allStepsContainer.Push(new GameplayStep(0, EDirection.None, allBlocksPositions));
-
-            currentGame = new DoubleGame(gameBoardGrid, gameData.Id, gameDataDynamic.BestSteps, gameDataDynamic.BestCoins, gameData.MinimumStepsCount, gameDataDynamic.GameCount, inscriptionBlockRed, inscriptionBlockBlue, targetBlockRed, targetBlockBlue, mobileBlocks, staticBlocks, allStepsContainer);
         }
-        else
+
+        List<StaticBlock> staticBlocks = null;
+
+        if (gameData.StaticBlocksPositions != null && gameData.StaticBlocksPositions.Count > 0)
         {
-            int indexCounter = 1;
+            staticBlocks = new List<StaticBlock>();
 
-            GameObject inscriptionBlockThird = null;
-            GameObject targetThird = null;
-            ChooseRandomBlock(gameData.Id, out inscriptionBlockThird, out targetThird);
+            int staticBlocksIndexCounter = 0;
 
-            SortedDictionary<int, Vector2> allBlocksPositions = new SortedDictionary<int, Vector2>();
-
-            InscriptionBlock inscriptionBlockRed = new InscriptionBlock(indexCounter, inscriptionRed, gameBoardGrid[(int)gameData.InscriptionBlockPositionRed.x, (int)gameData.InscriptionBlockPositionRed.y]);
-            allBlocksPositions.Add(indexCounter, gameData.InscriptionBlockPositionRed);
-            indexCounter++;
-
-            InscriptionBlock inscriptionBlockBlue = new InscriptionBlock(indexCounter, inscriptionBlue, gameBoardGrid[(int)gameData.InscriptionBlockPositionBlue.x, (int)gameData.InscriptionBlockPositionBlue.y]);
-            allBlocksPositions.Add(indexCounter, gameData.InscriptionBlockPositionBlue);
-            indexCounter++;
-
-            InscriptionBlock inscriptionBlockYellow = new InscriptionBlock(indexCounter, inscriptionBlockThird, gameBoardGrid[(int)gameData.InscriptionBlockPositionYellow.x, (int)gameData.InscriptionBlockPositionYellow.y]);
-            allBlocksPositions.Add(indexCounter, gameData.InscriptionBlockPositionYellow);
-            indexCounter++;
-
-            TargetBlock targetBlockRed = new TargetBlock(indexCounter, targetRed, gameBoardGrid[(int)gameData.InscriptionBlockTargetPositionRed.x, (int)gameData.InscriptionBlockTargetPositionRed.y]);
-            indexCounter++;
-
-            TargetBlock targetBlockBlue = new TargetBlock(indexCounter, targetBlue, gameBoardGrid[(int)gameData.InscriptionBlockTargetPositionBlue.x, (int)gameData.InscriptionBlockTargetPositionBlue.y]);
-            indexCounter++;
-
-            TargetBlock targetBlockYellow = new TargetBlock(indexCounter, targetThird, gameBoardGrid[(int)gameData.InscriptionBlockTargetPositionYellow.x, (int)gameData.InscriptionBlockTargetPositionYellow.y]);
-            indexCounter++;
-
-            List<MobileBlock> mobileBlocks = null;
-
-            if (gameData.MobileBlocksPositions != null && gameData.MobileBlocksPositions.Count > 0)
+            foreach (Vector2 pos in gameData.StaticBlocksPositions)
             {
-                mobileBlocks = new List<MobileBlock>();
-
-                int mobileBlocksIndexCounter = 0;
-
-                foreach (Vector2 pos in gameData.MobileBlocksPositions)
-                {
-                    MobileBlock tempBlock = new MobileBlock(indexCounter, this.mobileBlocks[mobileBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
-                    mobileBlocks.Add(tempBlock);
-                    allBlocksPositions.Add(indexCounter, pos);
-                    indexCounter++;
-                    mobileBlocksIndexCounter++;
-                }
+                StaticBlock tempBlock = new StaticBlock(indexCounter, this.staticBlocks[staticBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
+                staticBlocks.Add(tempBlock);
+                indexCounter++;
+                staticBlocksIndexCounter++;
             }
-
-            List<StaticBlock> staticBlocks = null;
-
-            if (gameData.StaticBlocksPositions != null && gameData.StaticBlocksPositions.Count > 0)
-            {
-                staticBlocks = new List<StaticBlock>();
-
-                int staticBlocksIndexCounter = 0;
-
-                foreach (Vector2 pos in gameData.StaticBlocksPositions)
-                {
-                    StaticBlock tempBlock = new StaticBlock(indexCounter, this.staticBlocks[staticBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
-                    staticBlocks.Add(tempBlock);
-                    indexCounter++;
-                    staticBlocksIndexCounter++;
-                }
-            }
-
-            Stack<GameplayStep> allStepsContainer = new Stack<GameplayStep>();
-            allStepsContainer.Push(new GameplayStep(0, EDirection.None, allBlocksPositions));
-
-            currentGame = new TripleGame(gameBoardGrid, gameData.Id, gameDataDynamic.BestSteps, gameDataDynamic.BestCoins, gameData.MinimumStepsCount,gameDataDynamic.GameCount, inscriptionBlockRed, inscriptionBlockBlue, inscriptionBlockYellow,targetBlockRed, targetBlockBlue, targetBlockYellow,mobileBlocks, staticBlocks, allStepsContainer);
         }
+
+        List<PawnBlock> pawnBlocks = null;
+
+        if (gameData.PawnBlocksPositions != null && gameData.PawnBlocksPositions.Count > 0)
+        {
+            pawnBlocks = new List<PawnBlock>();
+
+            int pawnBlocksIndexCounter = 0;
+
+            foreach (Vector2 pos in gameData.PawnBlocksPositions)
+            {
+                PawnBlock tempBlock = new PawnBlock(indexCounter, this.pawnBlocks[pawnBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
+                pawnBlocks.Add(tempBlock);
+                allBlocksPositions.Add(indexCounter, pos);
+                indexCounter++;
+                pawnBlocksIndexCounter++;
+            }
+        }
+
+
+        List<PawnTargetBlock> pawnTargetBlocks = null;
+
+        if (gameData.PawnTargetBlocksPositions != null && gameData.PawnTargetBlocksPositions.Count > 0)
+        {
+            pawnTargetBlocks = new List<PawnTargetBlock>();
+
+            int pawnTargetBlocksIndexCounter = 0;
+
+            foreach (Vector2 pos in gameData.PawnBlocksPositions)
+            {
+                PawnTargetBlock tempBlock = new PawnTargetBlock(indexCounter, this.pawnTargetBlocks[pawnTargetBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
+                pawnTargetBlocks.Add(tempBlock);
+                allBlocksPositions.Add(indexCounter, pos);
+                indexCounter++;
+                pawnTargetBlocksIndexCounter++;
+            }
+        }
+
+        List<TumblerBlock> tumblerBlocks = null;
+
+        if (gameData.TumblerBlocksPositions != null && gameData.TumblerBlocksPositions.Count > 0)
+        {
+            tumblerBlocks = new List<TumblerBlock>();
+
+            int tumblerBlocksIndexCounter = 0;
+
+            foreach (Vector2 pos in gameData.TumblerBlocksPositions)
+            {
+                TumblerBlock tempBlock = new TumblerBlock(indexCounter, this.tumblerBlocks[tumblerBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
+                tumblerBlocks.Add(tempBlock);
+                allBlocksPositions.Add(indexCounter, pos);
+                indexCounter++;
+                tumblerBlocksIndexCounter++;
+            }
+        }
+
+
+        List<TumblerTargetBlock> tumblerTargetBlocks = null;
+
+        if (gameData.TumblerTargetBlocksPositions != null && gameData.TumblerTargetBlocksPositions.Count > 0)
+        {
+            tumblerTargetBlocks = new List<TumblerTargetBlock>();
+
+            int tumblerTargetBlocksIndexCounter = 0;
+
+            foreach (Vector2 pos in gameData.TumblerBlocksPositions)
+            {
+                TumblerTargetBlock tempBlock = new TumblerTargetBlock(indexCounter, this.tumblerTargetBlocks[tumblerTargetBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
+                tumblerTargetBlocks.Add(tempBlock);
+                allBlocksPositions.Add(indexCounter, pos);
+                indexCounter++;
+                tumblerTargetBlocksIndexCounter++;
+            }
+        }
+
+        Stack<GameplayStep> allStepsContainer = new Stack<GameplayStep>();
+        allStepsContainer.Push(new GameplayStep(0, EDirection.None, allBlocksPositions));
+
+        currentGame = new Game(gameBoardGrid, gameData.Id, gameDataDynamic.BestSteps, gameDataDynamic.BestCoins, gameDataDynamic.GameCount, playerBlock, mobileBlocks, staticBlocks, pawnBlocks, pawnTargetBlocks, tumblerBlocks, tumblerTargetBlocks, allStepsContainer);
 
         currentGame.PutBlockObjects();
 
@@ -257,7 +242,8 @@ public class GameplayManager : MonoBehaviour, IGridElementObjectProvider
         currentGame.eventTransitOver += HandleTransitOver;
         currentGame.eventError += HandleError;
 
-        UIManager.Instance.CreateGame(currentGame.MinimumStepsCount, currentGame.BestStepsCount, currentGame.BestCoinsCount);
+        UIManager.Instance.CreateGame(10 /*currentGame.MinimumStepsCount*/, currentGame.BestStepsCount, currentGame.BestCoinsCount);
+        Debug.LogError("Change Calculation!");
 
         OnStartGame();
 
@@ -279,20 +265,6 @@ public class GameplayManager : MonoBehaviour, IGridElementObjectProvider
     private void EndGame()
     {
         ChangeGameplayState(EGameplayState.End);
-    }
-
-    private void ChooseRandomBlock(int gameId, out GameObject currentBlock, out GameObject currentTarget)
-    {
-        if (gameId % 2 == 0)
-        {
-            currentBlock = inscriptionGreen;
-            currentTarget = targetGreen;
-        }
-        else
-        {
-            currentBlock = inscriptionYellow;
-            currentTarget = targetYellow;
-        }
     }
 
     #region Update methods
