@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Game : AGame
 {
@@ -18,8 +19,16 @@ public class Game : AGame
         List<ABlock> allMovableBlocks = new List<ABlock>();
 
         allMovableBlocks.Add(playerBlock);
-        //allMovableBlocks.Add(inscriptionBlockBlue);
-        //allMovableBlocks.Add(inscriptionBlockYellow);
+
+        GridElement gridElement = playerBlock.CurrentElement.GetReferencePoint(EGridElementNeighborSide.Top);
+        if (gridElement != null && gridElement.State == EGridElementState.Full)
+        {
+            PawnBlock pawnBlock = pawnBlocks.FirstOrDefault(m => m.CurrentElement == gridElement);
+            if (pawnBlock != null)
+            {
+                allMovableBlocks.Add(pawnBlock);
+            }
+        }
 
         if (mobileBlocks != null && mobileBlocks.Count > 0)
         {
@@ -78,6 +87,7 @@ public class Game : AGame
 
             SoundManager.Instance.PlayStoneMove();
             ThrowFinalTransformEvent();
+            CalculateTumblers();
         }
     }
 
@@ -88,8 +98,16 @@ public class Game : AGame
         List<ABlock> allMovableBlocks = new List<ABlock>();
 
         allMovableBlocks.Add(playerBlock);
-        //allMovableBlocks.Add(inscriptionBlockBlue);
-        //allMovableBlocks.Add(inscriptionBlockYellow);
+
+        GridElement gridElement = playerBlock.CurrentElement.GetReferencePoint(EGridElementNeighborSide.Bottom);
+        if (gridElement != null && gridElement.State == EGridElementState.Full)
+        {
+            PawnBlock pawnBlock = pawnBlocks.FirstOrDefault(m => m.CurrentElement == gridElement);
+            if (pawnBlock != null)
+            {
+                allMovableBlocks.Add(pawnBlock);
+            }
+        }
 
         if (mobileBlocks != null && mobileBlocks.Count > 0)
         {
@@ -148,6 +166,7 @@ public class Game : AGame
 
             SoundManager.Instance.PlayStoneMove();
             ThrowFinalTransformEvent();
+            CalculateTumblers();
         }
     }
 
@@ -158,8 +177,16 @@ public class Game : AGame
         List<ABlock> allMovableBlocks = new List<ABlock>();
 
         allMovableBlocks.Add(playerBlock);
-        //allMovableBlocks.Add(inscriptionBlockBlue);
-        //allMovableBlocks.Add(inscriptionBlockYellow);
+
+        GridElement gridElement = playerBlock.CurrentElement.GetReferencePoint(EGridElementNeighborSide.Left);
+        if (gridElement != null && gridElement.State == EGridElementState.Full)
+        {
+            PawnBlock pawnBlock = pawnBlocks.FirstOrDefault(m => m.CurrentElement == gridElement);
+            if (pawnBlock != null)
+            {
+                allMovableBlocks.Add(pawnBlock);
+            }
+        }
 
         if (mobileBlocks != null && mobileBlocks.Count > 0)
         {
@@ -218,6 +245,7 @@ public class Game : AGame
 
             SoundManager.Instance.PlayStoneMove();
             ThrowFinalTransformEvent();
+            CalculateTumblers();
         }
     }
 
@@ -228,8 +256,16 @@ public class Game : AGame
         List<ABlock> allMovableBlocks = new List<ABlock>();
 
         allMovableBlocks.Add(playerBlock);
-        //allMovableBlocks.Add(inscriptionBlockBlue);
-        //allMovableBlocks.Add(inscriptionBlockYellow);
+
+        GridElement gridElement = playerBlock.CurrentElement.GetReferencePoint(EGridElementNeighborSide.Right);
+        if (gridElement != null && gridElement.State == EGridElementState.Full)
+        {
+            PawnBlock pawnBlock = pawnBlocks.FirstOrDefault(m => m.CurrentElement == gridElement);
+            if (pawnBlock != null)
+            {
+                allMovableBlocks.Add(pawnBlock);
+            }
+        }
 
         if (mobileBlocks != null && mobileBlocks.Count > 0)
         {
@@ -288,6 +324,7 @@ public class Game : AGame
 
             SoundManager.Instance.PlayStoneMove();
             ThrowFinalTransformEvent();
+            CalculateTumblers();
         }
     }
 
@@ -311,8 +348,14 @@ public class Game : AGame
             List<ABlock> allMovableBlocks = new List<ABlock>();
 
             allMovableBlocks.Add(playerBlock);
-            //allMovableBlocks.Add(inscriptionBlockBlue);
-            //allMovableBlocks.Add(inscriptionBlockYellow);
+            
+            if (pawnBlocks != null && pawnBlocks.Count > 0)
+            {
+                foreach (PawnBlock block in pawnBlocks)
+                {
+                    allMovableBlocks.Add(block);
+                }
+            }
 
             if (mobileBlocks != null && mobileBlocks.Count > 0)
             {
@@ -335,13 +378,20 @@ public class Game : AGame
 
         SoundManager.Instance.PlayStoneMove();
         ThrowFinalTransformEvent();
+        CalculateTumblers();
     }
 
     protected override void StartStoneMatchEffects()
     {
-        playerBlock.StartStoneMatchEffects();
-        //inscriptionBlockBlue.StartStoneMatchEffects();
-        //inscriptionBlockYellow.StartStoneMatchEffects();
+        //playerBlock.StartStoneMatchEffects();
+
+        if (pawnBlocks != null && pawnBlocks.Count > 0)
+        {
+            foreach (PawnBlock block in pawnBlocks)
+            {
+                block.StartStoneMatchEffects();
+            }
+        }
     }
 
     public override void PutBlockObjects()
@@ -349,12 +399,6 @@ public class Game : AGame
         List<ABlock> allBlocks = new List<ABlock>();
 
         allBlocks.Add(playerBlock);
-        //allBlocks.Add(inscriptionBlockBlue);
-        //allBlocks.Add(inscriptionBlockYellow);
-
-        //allBlocks.Add(targetBlockRed);
-        //allBlocks.Add(targetBlockBlue);
-        //allBlocks.Add(targetBlockYellow);
 
         if (mobileBlocks != null && mobileBlocks.Count > 0)
         {
@@ -367,6 +411,38 @@ public class Game : AGame
         if (staticBlocks != null && staticBlocks.Count > 0)
         {
             foreach (StaticBlock block in staticBlocks)
+            {
+                allBlocks.Add(block);
+            }
+        }
+
+        if (pawnBlocks != null && pawnBlocks.Count > 0)
+        {
+            foreach (PawnBlock block in pawnBlocks)
+            {
+                allBlocks.Add(block);
+            }
+        }
+
+        if (pawnTargetBlocks != null && pawnTargetBlocks.Count > 0)
+        {
+            foreach (PawnTargetBlock block in pawnTargetBlocks)
+            {
+                allBlocks.Add(block);
+            }
+        }
+
+        if (tumblerBlocks != null && tumblerBlocks.Count > 0)
+        {
+            foreach (TumblerBlock block in tumblerBlocks)
+            {
+                allBlocks.Add(block);
+            }
+        }
+
+        if (tumblerTargetBlocks != null && tumblerTargetBlocks.Count > 0)
+        {
+            foreach (TumblerTargetBlock block in tumblerTargetBlocks)
             {
                 allBlocks.Add(block);
             }
@@ -383,12 +459,6 @@ public class Game : AGame
         List<ABlock> allBlocks = new List<ABlock>();
 
         allBlocks.Add(playerBlock);
-        //allBlocks.Add(inscriptionBlockBlue);
-        //allBlocks.Add(inscriptionBlockYellow);
-
-        //allBlocks.Add(targetBlockRed);
-        //allBlocks.Add(targetBlockBlue);
-        //allBlocks.Add(targetBlockYellow);
 
         if (mobileBlocks != null && mobileBlocks.Count > 0)
         {
@@ -406,6 +476,38 @@ public class Game : AGame
             }
         }
 
+        if (pawnBlocks != null && pawnBlocks.Count > 0)
+        {
+            foreach (PawnBlock block in pawnBlocks)
+            {
+                allBlocks.Add(block);
+            }
+        }
+
+        if (pawnTargetBlocks != null && pawnTargetBlocks.Count > 0)
+        {
+            foreach (PawnTargetBlock block in pawnTargetBlocks)
+            {
+                allBlocks.Add(block);
+            }
+        }
+
+        if (tumblerBlocks != null && tumblerBlocks.Count > 0)
+        {
+            foreach (TumblerBlock block in tumblerBlocks)
+            {
+                allBlocks.Add(block);
+            }
+        }
+
+        if (tumblerTargetBlocks != null && tumblerTargetBlocks.Count > 0)
+        {
+            foreach (TumblerTargetBlock block in tumblerTargetBlocks)
+            {
+                allBlocks.Add(block);
+            }
+        }
+
         foreach (ABlock block in allBlocks)
         {
             block.BlockPosition = new Vector3(200, 200, 200);
@@ -417,8 +519,14 @@ public class Game : AGame
         List<ABlock> allBlocks = new List<ABlock>();
 
         allBlocks.Add(playerBlock);
-        //allBlocks.Add(inscriptionBlockBlue);
-        //allBlocks.Add(inscriptionBlockYellow);
+
+        if (pawnBlocks != null && pawnBlocks.Count > 0)
+        {
+            foreach (PawnBlock block in pawnBlocks)
+            {
+                allBlocks.Add(block);
+            }
+        }
 
         if (mobileBlocks != null && mobileBlocks.Count > 0)
         {
@@ -451,18 +559,64 @@ public class Game : AGame
 
         ThrowTransitOverEvent();
 
-        //if (inscriptionBlockRed.CurrentElement == targetBlockRed.CurrentElement && inscriptionBlockBlue.CurrentElement == targetBlockBlue.CurrentElement && inscriptionBlockYellow.CurrentElement == targetBlockYellow.CurrentElement)
-        //{
-        //    SoundManager.Instance.PlayStoneStop();
-        //    StartStoneMatchEffects();
-        //    ThrowStonesMatchEvent();
-        //    return;
-        //}
+        if (IsMatchEnded())
+        {
+            SoundManager.Instance.PlayStoneStop();
+            StartStoneMatchEffects();
+            ThrowStonesMatchEvent();
+            return;
+        }
 
         if (stepsCounter > GameStartData.MaximumStepsCount)
         {
             ThrowErrorEvent(EErrorType.StepsCount);
         }
+    }
+
+    private void CalculateTumblers()
+    {
+        for (int i = 0; i < tumblerBlocks.Count; i++)
+        {
+            bool tumblerIsOn = tumblerTargetBlocks.Where(m => m.GroupId == tumblerBlocks[i].GroupId)
+                                                  .Any(m => m.CurrentElement.State == EGridElementState.Full);
+
+            GridElement gridElement = tumblerBlocks[i].CurrentElement;
+            
+            if (tumblerIsOn)
+            {
+                if(gridElement.State == EGridElementState.Inaccessible)
+                {
+                    gridElement.SetEmpty();
+                }
+            }
+            else
+            {
+                if (gridElement.State == EGridElementState.Empty)
+                {
+                    gridElement.SetInaccessible();
+                }
+            }
+        }
+    }
+
+    private bool IsMatchEnded()
+    {
+        bool matchIsEnded = false;
+
+        for (int i = 0; i < pawnTargetBlocks.Count; i++)
+        {
+            if (pawnTargetBlocks[i].CurrentElement.State == EGridElementState.Full)
+            {
+                matchIsEnded = pawnBlocks.Where(m => m.GroupId == pawnTargetBlocks[i].GroupId)
+                                         .Any(m => m.CurrentElement == pawnTargetBlocks[i].CurrentElement);
+                if (!matchIsEnded)
+                {
+                    break;
+                }
+            }
+        }
+
+        return matchIsEnded;
     }
 }
 

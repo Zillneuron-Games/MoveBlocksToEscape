@@ -3,9 +3,15 @@ using UnityEngine;
 
 public class PawnBlock : ABlock
 {
-    public PawnBlock(int id, GameObject blockObject, GridElement gridElement) : base(id, blockObject, gridElement)
+    private int groupId;
+
+    public int GroupId => groupId;
+
+    public PawnBlock(int id, int group, GameObject blockObject, GridElement gridElement) : base(id, blockObject, gridElement)
     {
         isMovable = true;
+        groupId = group;
+
         gridElement.SetFull();
 
         SetActive(true);

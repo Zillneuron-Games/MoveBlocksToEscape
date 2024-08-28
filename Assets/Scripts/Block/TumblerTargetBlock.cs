@@ -3,9 +3,14 @@ using UnityEngine;
 
 public class TumblerTargetBlock : ABlock
 {
-    public TumblerTargetBlock(int id, GameObject blockObject, GridElement gridElement) : base(id, blockObject, gridElement)
+    private int groupId;
+
+    public int GroupId => groupId;
+
+    public TumblerTargetBlock(int id, int group, GameObject blockObject, GridElement gridElement) : base(id, blockObject, gridElement)
     {
         isMovable = false;
+        groupId = group;
     }
 
     public override void ChangePoint(GridElement newElement)

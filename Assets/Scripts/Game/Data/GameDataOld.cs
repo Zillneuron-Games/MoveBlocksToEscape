@@ -12,10 +12,10 @@ public class GameDataOld
     public Vector2 PlayerPosition;
     public List<Vector2> MobileBlocksPositions;
     public List<Vector2> StaticBlocksPositions;
-    public List<Vector2> PawnBlocksPositions;
-    public List<Vector2> PawnTargetBlocksPositions;
-    public List<Vector2> TumblerBlocksPositions;
-    public List<Vector2> TumblerTargetBlocksPositions;
+    public List<Vector3> PawnBlocksPositions;
+    public List<Vector3> PawnTargetBlocksPositions;
+    public List<Vector3> TumblerBlocksPositions;
+    public List<Vector3> TumblerTargetBlocksPositions;
 
     public GameDataOld()
     {
@@ -26,10 +26,10 @@ public class GameDataOld
         this.PlayerPosition = Vector2.zero;
         this.MobileBlocksPositions = new List<Vector2>();
         this.StaticBlocksPositions = new List<Vector2>();
-        this.PawnBlocksPositions = new List<Vector2>();
-        this.PawnTargetBlocksPositions = new List<Vector2>();
-        this.TumblerBlocksPositions = new List<Vector2>();
-        this.TumblerTargetBlocksPositions = new List<Vector2>();
+        this.PawnBlocksPositions = new List<Vector3>();
+        this.PawnTargetBlocksPositions = new List<Vector3>();
+        this.TumblerBlocksPositions = new List<Vector3>();
+        this.TumblerTargetBlocksPositions = new List<Vector3>();
     }
 }
 

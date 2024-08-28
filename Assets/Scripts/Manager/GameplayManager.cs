@@ -164,11 +164,11 @@ public class GameplayManager : MonoBehaviour, IGridElementObjectProvider
 
             int pawnBlocksIndexCounter = 0;
 
-            foreach (Vector2 pos in gameData.PawnBlocksPositions)
+            foreach (Vector3 pos in gameData.PawnBlocksPositions)
             {
-                PawnBlock tempBlock = new PawnBlock(indexCounter, this.pawnBlocks[pawnBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
+                PawnBlock tempBlock = new PawnBlock(indexCounter, (int)pos.z, this.pawnBlocks[pawnBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
                 pawnBlocks.Add(tempBlock);
-                allBlocksPositions.Add(indexCounter, pos);
+                allBlocksPositions.Add(indexCounter, new Vector2(pos.x, pos.y));
                 indexCounter++;
                 pawnBlocksIndexCounter++;
             }
@@ -183,11 +183,11 @@ public class GameplayManager : MonoBehaviour, IGridElementObjectProvider
 
             int pawnTargetBlocksIndexCounter = 0;
 
-            foreach (Vector2 pos in gameData.PawnBlocksPositions)
+            foreach (Vector3 pos in gameData.PawnTargetBlocksPositions)
             {
-                PawnTargetBlock tempBlock = new PawnTargetBlock(indexCounter, this.pawnTargetBlocks[pawnTargetBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
+                PawnTargetBlock tempBlock = new PawnTargetBlock(indexCounter, (int)pos.z, this.pawnTargetBlocks[pawnTargetBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
                 pawnTargetBlocks.Add(tempBlock);
-                allBlocksPositions.Add(indexCounter, pos);
+                allBlocksPositions.Add(indexCounter, new Vector2(pos.x, pos.y));
                 indexCounter++;
                 pawnTargetBlocksIndexCounter++;
             }
@@ -201,11 +201,11 @@ public class GameplayManager : MonoBehaviour, IGridElementObjectProvider
 
             int tumblerBlocksIndexCounter = 0;
 
-            foreach (Vector2 pos in gameData.TumblerBlocksPositions)
+            foreach (Vector3 pos in gameData.TumblerBlocksPositions)
             {
-                TumblerBlock tempBlock = new TumblerBlock(indexCounter, this.tumblerBlocks[tumblerBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
+                TumblerBlock tempBlock = new TumblerBlock(indexCounter, (int)pos.z, this.tumblerBlocks[tumblerBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
                 tumblerBlocks.Add(tempBlock);
-                allBlocksPositions.Add(indexCounter, pos);
+                allBlocksPositions.Add(indexCounter, new Vector2(pos.x, pos.y));
                 indexCounter++;
                 tumblerBlocksIndexCounter++;
             }
@@ -220,11 +220,11 @@ public class GameplayManager : MonoBehaviour, IGridElementObjectProvider
 
             int tumblerTargetBlocksIndexCounter = 0;
 
-            foreach (Vector2 pos in gameData.TumblerBlocksPositions)
+            foreach (Vector3 pos in gameData.TumblerTargetBlocksPositions)
             {
-                TumblerTargetBlock tempBlock = new TumblerTargetBlock(indexCounter, this.tumblerTargetBlocks[tumblerTargetBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
+                TumblerTargetBlock tempBlock = new TumblerTargetBlock(indexCounter,(int)pos.z , this.tumblerTargetBlocks[tumblerTargetBlocksIndexCounter], gameBoardGrid[(int)pos.x, (int)pos.y]);
                 tumblerTargetBlocks.Add(tempBlock);
-                allBlocksPositions.Add(indexCounter, pos);
+                allBlocksPositions.Add(indexCounter, new Vector2(pos.x, pos.y));
                 indexCounter++;
                 tumblerTargetBlocksIndexCounter++;
             }

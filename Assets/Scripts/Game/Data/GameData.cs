@@ -12,10 +12,10 @@ public class GameData
     public Vector2 PlayerPosition;
     public List<Vector2> MobileBlocksPositions;
     public List<Vector2> StaticBlocksPositions;
-    public List<Vector2> PawnBlocksPositions;
-    public List<Vector2> PawnTargetBlocksPositions;
-    public List<Vector2> TumblerBlocksPositions;
-    public List<Vector2> TumblerTargetBlocksPositions;
+    public List<Vector3> PawnBlocksPositions;
+    public List<Vector3> PawnTargetBlocksPositions;
+    public List<Vector3> TumblerBlocksPositions;
+    public List<Vector3> TumblerTargetBlocksPositions;
 
     public GameData()
     {
@@ -32,7 +32,7 @@ public class GameData
         TumblerTargetBlocksPositions = null;
     }
 
-    public GameData(int id, string level, string name, Vector2 playerPosition, List<Vector2> mobileBlocksPositions, List<Vector2> staticBlocksositions, List<Vector2> pawnBlocksPositions, List<Vector2> pawnTargetBlocksPositions, List<Vector2> tumblerBlocksPositions, List<Vector2> tumblerTargetBlocksPositions)
+    public GameData(int id, string level, string name, Vector2 playerPosition, List<Vector2> mobileBlocksPositions, List<Vector2> staticBlocksositions, List<Vector3> pawnBlocksPositions, List<Vector3> pawnTargetBlocksPositions, List<Vector3> tumblerBlocksPositions, List<Vector3> tumblerTargetBlocksPositions)
     {
         Id = id;
         Level = level;

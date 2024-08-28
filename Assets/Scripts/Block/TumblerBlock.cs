@@ -3,10 +3,16 @@ using UnityEngine;
 
 public class TumblerBlock : ABlock
 {
-    public TumblerBlock(int id, GameObject blockObject, GridElement gridElement) : base(id, blockObject, gridElement)
+    private int groupId;
+
+    public int GroupId => groupId;
+
+    public TumblerBlock(int id, int group, GameObject blockObject, GridElement gridElement) : base(id, blockObject, gridElement)
     {
         isMovable = true;
-        gridElement.SetFull();
+        groupId = group;
+
+        gridElement.SetInaccessible();
 
         SetActive(true);
     }

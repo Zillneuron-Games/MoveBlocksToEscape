@@ -3,9 +3,14 @@ using UnityEngine;
 
 public class PawnTargetBlock : ABlock
 {
-    public PawnTargetBlock(int id, GameObject blockObject, GridElement gridElement) : base(id, blockObject, gridElement)
+    private int groupId;
+
+    public int GroupId => groupId;
+
+    public PawnTargetBlock(int id, int group, GameObject blockObject, GridElement gridElement) : base(id, blockObject, gridElement)
     {
         isMovable = false;
+        groupId = group;
     }
 
     public override void ChangePoint(GridElement newElement)
